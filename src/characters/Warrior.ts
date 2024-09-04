@@ -15,8 +15,6 @@ export class Warrior extends Character {
     public position: Coordinate,
   ) {
     super(name, stats, attributes, items, position);
-    this.nextDmg = 0;
-    this.bonusDef = 0;
   }
 
   attack() {

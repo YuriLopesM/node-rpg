@@ -1,5 +1,5 @@
+import { BattleManager } from "./battle/BattleManager";
 import { Race, Role } from "./enums";
-import { CharacterFactory } from "./factories/roles";
 
 interface Tile {
   type: string;
@@ -33,14 +33,18 @@ function drawMapWithBorders(map: Tile[][]): void {
 
 drawMapWithBorders(map);
 
-const Player1 = CharacterFactory.createCharacter(
-  Race.MIDDLE_AGE,
-  Role.WARRIOR,
-  "Juggernaut",
-);
-Player1.move({ x: 1, y: 1 });
-Player1.doAction("Attack");
-Player1.doAction("Defend");
-Player1.doAction("Cast");
-Player1.doAction("Ultimate");
-Player1.doAction("Skip");
+const main = () => {
+  const Player1 = BattleManager.createCharacter(
+    Race.MIDDLE_AGE,
+    Role.WARRIOR,
+    "Juggernaut",
+  );
+  Player1.move({ x: 1, y: 1 });
+  Player1.doAction("Attack");
+  Player1.doAction("Defend");
+  Player1.doAction("Cast");
+  Player1.doAction("Ultimate");
+  Player1.doAction("Skip");
+};
+
+main();

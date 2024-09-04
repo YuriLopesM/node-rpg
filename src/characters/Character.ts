@@ -14,6 +14,11 @@ export abstract class Character {
     public items: CharacterItems,
     public position: Coordinate,
   ) {
+    this.name = name;
+    this.stats = stats;
+    this.attributes = attributes;
+    this.items = items;
+    this.position = position;
     this.nextDmg = 0;
     this.bonusDef = 0;
   }
@@ -31,7 +36,7 @@ export abstract class Character {
       throw new Error(`Action ${action} is not valid!`);
     }
 
-    actionSelected[action]();
+    console.log(actionSelected[action]());
   }
 
   rollDice(): number {

@@ -7,9 +7,9 @@ import {
 import { Character, Marksman } from "../../characters";
 import { Role } from "../../enums";
 import { MiddleAgeFactory, SciFiFactory } from "../../factories/races";
-import { CharacterRace } from "./CharacterRace";
+import { CharacterFactory } from "./CharacterFactory";
 
-export class MarksmanFactory implements CharacterRace {
+export class MarksmanFactory implements CharacterFactory {
   createMiddleAgeCharacter(
     name: string,
     initialPosition: Coordinate,
