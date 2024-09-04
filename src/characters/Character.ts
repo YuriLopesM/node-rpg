@@ -1,48 +1,67 @@
-import { Armor, Weapon } from "@/items";
+import {
+  CharacterAttributes,
+  CharacterItems,
+  CharacterStats,
+  Coordinate,
+} from "../@types";
+import { Action, ActionType } from "../enums";
 
 export abstract class Character {
   constructor(
     public name: string,
-    public health: number,       // HP 0-50
-    public energy: number,       // MP 0-20
-    public strength: number,     // 0-10
-    public dexterity: number,    // 0-10
-    public intelligence: number, // 0-10
-    public vitality: number,     // 0-10
-    public weapon: Weapon,
-    public armor: Armor
-  ) {}
+    public stats: CharacterStats,
+    public attributes: CharacterAttributes,
+    public items: CharacterItems,
+    public position: Coordinate,
+  ) {
+    this.nextDmg = 0;
+    this.bonusDef = 0;
+  }
 
-  abstract attack(): string;
-  abstract defend(): string;
-  abstract castSpell(): string;
-  abstract castUltimateSpell(): string;
+  doAction(action: ActionType): void {
+    const actionSelected: { [key in ActionType]: () => void } = {
+      [Action.ATTACK]: () => this.attack(),
+      [Action.DEFEND]: () => this.defend(),
+      [Action.CAST_SPELL]: () => this.castSpell(),
+      [Action.CAST_ULTIMATE]: () => this.castUltimateSpell(),
+      [Action.SKIP]: () => this.skipTurn(),
+    };
+
+    if (!actionSelected[action]) {
+      throw new Error(`Action ${action} is not valid!`);
+    }
+
+    actionSelected[action]();
+  }
 
   rollDice(): number {
     const number = Math.floor(Math.random() * 20) + 1;
     console.log(`${this.name} rolled a ${number}!`);
+    return number;
+  }
 
-    return number
+  move(newPosition: Coordinate): string {
+    const possibleMove =
+      this.calculateDistance(newPosition) <= this.stats.maxMovement;
+    if (!possibleMove) {
+      return `${this.name} can't move to that position!`;
+    }
+    this.position = newPosition;
+    return `${this.name} moved to position x: ${newPosition.x}, y: ${newPosition.y}.`;
   }
 
   skipTurn(): string {
-    const energyRestored = this.intelligence * 0.3;
-    this.energy += energyRestored;
-
-    return `${this.name} is skipping turn. Energy restored: +${energyRestored}.`;
-  }
-
-  isCriticalHit(): boolean {
-    return this.rollDice() >= 18;
-  }
-
-  isCriticalMiss(): boolean {
-    return this.rollDice() <= 5;
+    const energyRestored = this.attributes.intelligence * 0.3;
+    this.stats.energy += energyRestored;
+    return `${this.name} skipped the turn and restored ${energyRestored} energy!`;
   }
 
   dealDmg(target: Character): string {
-    const dmg = this.nextDmg + this.weapon.damage;
-    const def = target.bonusDef + target.armor.defense;
+    if (!this.canAttack(target.position)) {
+      return `${this.name} is too far from ${target.name} to attack!`;
+    }
+    const dmg = this.nextDmg + this.items.weapon.damage;
+    const def = target.bonusDef + target.items.armor.defense;
 
     if (dmg <= def) {
       return `${this.name} landed a hit, but ${target.name} received 0 damage!`;
@@ -64,18 +83,40 @@ export abstract class Character {
   }
 
   receiveDmg(dmg: number): string {
-    this.health -= dmg;
+    this.stats.health -= dmg;
 
-    if (this.isDead()) 
-      return `${this.name} received ${dmg} damage and died!`;
-    
+    if (this.isDead()) return `${this.name} received ${dmg} damage and died!`;
+
     return `${this.name} received ${dmg} damage!`;
   }
 
-  private isDead(): boolean {
-    return this.health <= 0;
+  private isCriticalHit() {
+    return this.rollDice() >= 18;
   }
 
-  protected nextDmg: number = 0;
-  protected bonusDef: number = 0;
+  private isCriticalMiss() {
+    return this.rollDice() <= 5;
+  }
+
+  private calculateDistance(targetPosition: Coordinate): number {
+    return Math.sqrt(
+      Math.pow(targetPosition.x - this.position.x, 2) +
+        Math.pow(targetPosition.y - this.position.y, 2),
+    );
+  }
+
+  private canAttack(targetPosition: Coordinate): boolean {
+    return this.calculateDistance(targetPosition) <= this.items.weapon.range;
+  }
+
+  private isDead() {
+    return this.stats.health <= 0;
+  }
+
+  protected nextDmg: number;
+  protected bonusDef: number;
+  protected abstract attack(): string;
+  protected abstract defend(): string;
+  protected abstract castSpell(): string;
+  protected abstract castUltimateSpell(): string;
 }

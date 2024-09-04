@@ -1,3 +1,3 @@
-export * from './MiddleAgeFactory'
-export * from './RaceFactory'
-export * from './SciFiFactory'
+export * from "./MiddleAgeFactory";
+export * from "./RaceFactory";
+export * from "./SciFiFactory";

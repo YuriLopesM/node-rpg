@@ -52,4 +52,14 @@ class LaserSniper implements Weapon {
   range = 8;
 }
 
-export { ArcaneGlove, Bow, HolograficDagger, LaserSniper, LightSaber, SteelKunai, SteelSword, Weapon, WoodStaff };
+export {
+  ArcaneGlove,
+  Bow,
+  HolograficDagger,
+  LaserSniper,
+  LightSaber,
+  SteelKunai,
+  SteelSword,
+  Weapon,
+  WoodStaff,
+};

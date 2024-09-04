@@ -1,4 +1,4 @@
-import { RoleType } from "@/enums";
+import { RoleType } from "../../enums";
 import { Armor } from "../../items/Armor";
 import { Weapon } from "../../items/Weapon";
 

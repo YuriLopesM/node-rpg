@@ -1,19 +1,32 @@
-import { RoleType } from "@/enums";
+import { RoleType } from "../../enums";
 
-import { Armor, CamoShell, ChronoMantle, FlexibleVanguard, ShadowMantle } from "@/factories/items/Armor";
-import { ArcaneGlove, HolograficDagger, LaserSniper, LightSaber, Weapon } from "@/factories/items/Weapon";
-import { ItemFactory } from "@/items";
+import {
+  Armor,
+  CamoShell,
+  ChronoMantle,
+  FlexibleVanguard,
+  ShadowMantle,
+} from "../../items/Armor";
+import {
+  ArcaneGlove,
+  HolograficDagger,
+  LaserSniper,
+  LightSaber,
+  Weapon,
+} from "../../items/Weapon";
 
-export class SciFiFactory implements ItemFactory {
+import { RaceFactory } from "./RaceFactory";
+
+export class SciFiFactory implements RaceFactory {
   equipWeapon(type: RoleType): Weapon {
     const weaponToEquip: Record<RoleType, Weapon> = {
       Rogue: new HolograficDagger(),
       Warrior: new LightSaber(),
       Mage: new ArcaneGlove(),
       Marksman: new LaserSniper(),
-    }
+    };
 
-    return weaponToEquip[type]; 
+    return weaponToEquip[type];
   }
 
   equipArmor(type: RoleType): Armor {
@@ -22,8 +35,8 @@ export class SciFiFactory implements ItemFactory {
       Warrior: new FlexibleVanguard(),
       Mage: new ChronoMantle(),
       Marksman: new CamoShell(),
-    }
+    };
 
-    return armorToEquip[type]; 
+    return armorToEquip[type];
   }
 }

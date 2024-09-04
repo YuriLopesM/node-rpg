@@ -1,4 +1,3 @@
-
 interface Armor {
   name: string;
   defense: number;
@@ -44,5 +43,14 @@ class CamoShell implements Armor {
   defense = 6;
 }
 
-export { Armor, CamoShell, ChronoMantle, FlexibleVanguard, LeatherCloathes, NinjaCloak, ShadowMantle, SteelArmor, Tunic };
-
+export {
+  Armor,
+  CamoShell,
+  ChronoMantle,
+  FlexibleVanguard,
+  LeatherCloathes,
+  NinjaCloak,
+  ShadowMantle,
+  SteelArmor,
+  Tunic,
+};

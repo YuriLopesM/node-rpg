@@ -1,9 +1,21 @@
-import { RoleType } from "@/enums";
+import { RoleType } from "../../enums";
 
-import { RaceFactory } from "@/factories/races";
+import { RaceFactory } from "../../factories/races";
 
-import { Armor, LeatherCloathes, NinjaCloak, SteelArmor, Tunic } from "@/items/Armor";
-import { Bow, SteelKunai, SteelSword, Weapon, WoodStaff } from "@/items/Weapon";
+import {
+  Armor,
+  LeatherCloathes,
+  NinjaCloak,
+  SteelArmor,
+  Tunic,
+} from "../../items/Armor";
+import {
+  Bow,
+  SteelKunai,
+  SteelSword,
+  Weapon,
+  WoodStaff,
+} from "../../items/Weapon";
 
 export class MiddleAgeFactory implements RaceFactory {
   equipWeapon(type: RoleType): Weapon {
@@ -12,9 +24,9 @@ export class MiddleAgeFactory implements RaceFactory {
       Warrior: new SteelSword(),
       Mage: new WoodStaff(),
       Marksman: new Bow(),
-    }
+    };
 
-    return weaponToEquip[type]; 
+    return weaponToEquip[type];
   }
 
   equipArmor(type: RoleType): Armor {
@@ -23,8 +35,8 @@ export class MiddleAgeFactory implements RaceFactory {
       Warrior: new SteelArmor(),
       Mage: new Tunic(),
       Marksman: new LeatherCloathes(),
-    }
+    };
 
-    return armorToEquip[type]; 
+    return armorToEquip[type];
   }
 }
