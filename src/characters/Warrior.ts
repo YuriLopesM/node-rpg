@@ -20,19 +20,20 @@ export class Warrior extends Character {
 
   attack() {
     if (this.stats.energy < 2) {
-      chalk.white(`${this.name} doesn't have enough energy to attack.`);
+      console.log(`${this.name} doesn't have enough energy to attack.`);
     }
     this.stats.energy -= 2;
 
-    const dmg = this.attributes.strength + this.attributes.dexterity * 0.2;
+    const dmg = Math.round(
+      this.attributes.strength + this.attributes.dexterity * 0.2,
+    );
     this.nextDmg = dmg;
-
-    chalk.white(`${this.name} swings his sword! Dmg: ${dmg}.`);
+    console.log(chalk.cyanBright(`${this.name} swings his sword!`));
   }
 
   defend() {
     if (this.stats.energy < 2) {
-      chalk.white(`${this.name} doesn't have enough energy to defend.`);
+      console.log(`${this.name} doesn't have enough energy to defend.`);
     }
     this.stats.energy -= 2;
 
@@ -40,19 +41,19 @@ export class Warrior extends Character {
 
     this.nextDmg = 0;
     this.bonusDef = def;
-    chalk.white(`${this.name} is defending! More ${def} to defense!`);
+    console.log(`${this.name} is defending!`);
   }
 
   castSpell() {
     const rage = this.attributes.strength * 0.5;
     this.attributes.strength += rage;
 
-    chalk.white(`${this.name} erases in rage! Increase in strength: +${rage}.`);
+    console.log(`${this.name} erases in rage! Increase in strength: +${rage}.`);
   }
 
   castUltimateSpell() {
     if (this.stats.energy < 10) {
-      chalk.white(
+      console.log(
         `${this.name} doesn't have enough energy to cast the ultimate spell.`,
       );
     }
@@ -61,7 +62,7 @@ export class Warrior extends Character {
     const dmg = this.attributes.strength * 2;
     this.nextDmg = dmg;
 
-    chalk.white(
+    console.log(
       `${this.name} casts the ultimate spell: a giant sword falls from heaven! Dmg: ${dmg}.`,
     );
   }

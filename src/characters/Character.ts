@@ -24,6 +24,8 @@ export abstract class Character {
     this.bonusDef = 0;
   }
 
+  listCharacterInfo(): void {}
+
   doAction(action: ActionType): void {
     const actionSelected: { [key in ActionType]: () => void } = {
       [Action.ATTACK]: () => this.attack(),
@@ -50,10 +52,12 @@ export abstract class Character {
     const possibleMove =
       this.calculateDistance(newPosition) <= this.stats.maxMovement;
     if (!possibleMove) {
-      chalk.white(`${this.name} can't move to that position!`);
+      console.log(
+        chalk.bgRedBright(`${this.name} can't move to that position!`),
+      );
     }
     this.position = newPosition;
-    chalk.white(
+    console.log(
       `${this.name} moved to position x: ${newPosition.x}, y: ${newPosition.y}.`,
     );
   }
@@ -61,20 +65,20 @@ export abstract class Character {
   skipTurn(): void {
     const energyRestored = this.attributes.intelligence * 0.3;
     this.stats.energy += energyRestored;
-    chalk.white(
+    console.log(
       `${this.name} skipped the turn and restored ${energyRestored} energy!`,
     );
   }
 
   dealDmg(target: Character): void {
     if (!this.canAttack(target.position)) {
-      chalk.white(`${this.name} is too far from ${target.name} to attack!`);
+      console.log(`${this.name} is too far from ${target.name} to attack!`);
     }
     const dmg = this.nextDmg + this.items.weapon.damage;
     const def = target.bonusDef + target.items.armor.defense;
 
     if (dmg <= def) {
-      chalk.white(
+      console.log(
         `${this.name} landed a hit, but ${target.name} received 0 damage!`,
       );
     }
@@ -83,17 +87,17 @@ export abstract class Character {
 
     if (this.isCriticalHit()) {
       target.receiveDmg(totalDmg * 1.75);
-      chalk.white(
+      console.log(
         `${this.name} landed a critical hit! ${target.name} received ${totalDmg * 2} damage!`,
       );
     }
 
     if (this.isCriticalMiss()) {
-      chalk.white(`${this.name} missed the attack!`);
+      console.log(`${this.name} missed the attack!`);
     }
 
     target.receiveDmg(totalDmg);
-    chalk.white(
+    console.log(
       `${this.name} landed a hit! ${target.name} received ${totalDmg} damage!`,
     );
   }
@@ -102,9 +106,9 @@ export abstract class Character {
     this.stats.health -= dmg;
 
     if (this.isDead())
-      chalk.white(`${this.name} received ${dmg} damage and died!`);
+      console.log(`${this.name} received ${dmg} damage and died!`);
 
-    chalk.white(`${this.name} received ${dmg} damage!`);
+    console.log(`${this.name} received ${dmg} damage!`);
   }
 
   private isCriticalHit() {

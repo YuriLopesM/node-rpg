@@ -1,3 +1,4 @@
+import chalk, { type ColorName } from "chalk";
 import { BattleManager } from "./battle/BattleManager";
 import { Race, Role } from "./enums";
 
@@ -5,33 +6,64 @@ interface Tile {
   type: string;
   walkable: boolean;
   symbol: string;
+  textColor: ColorName;
 }
 
 let map: Tile[][] = Array.from({ length: 15 }, () =>
-  Array(15).fill({ type: "Empty", walkable: true, symbol: "." }),
+  Array(15).fill({
+    type: "Empty",
+    walkable: true,
+    symbol: " ",
+    textColor: "bgBlack",
+  }),
 );
 
-map[0][0] = { type: "Forest", walkable: true, symbol: "T" };
-map[2][3] = { type: "River", walkable: false, symbol: "~" };
-map[5][5] = { type: "Mountain", walkable: false, symbol: "^" };
-map[9][9] = { type: "Village", walkable: true, symbol: "H" };
+map[0][0] = {
+  type: "Forest",
+  walkable: true,
+  symbol: " ",
+  textColor: "bgGreen",
+};
+map[2][3] = {
+  type: "River",
+  walkable: false,
+  symbol: " ",
+  textColor: "bgBlueBright",
+};
+map[5][5] = {
+  type: "Mountain",
+  walkable: false,
+  symbol: " ",
+  textColor: "bgWhiteBright",
+};
+map[9][9] = {
+  type: "Village",
+  walkable: true,
+  symbol: " ",
+  textColor: "bgYellow",
+};
 
 function drawMapWithBorders(map: Tile[][]): void {
   const tileWidth = 2;
-  const horizontalBorder =
-    "+" + "-".repeat(map[0].length * tileWidth - 1) + "+";
+  const horizontalBorder = chalk.bgRedBright(
+    "  " + " ".repeat(map[0].length * tileWidth) + "  ",
+  );
 
   console.log(horizontalBorder);
 
   for (let row of map) {
-    let rowString = row.map(tile => `${tile.symbol} `).join(""); // Add space for alignment
-    console.log("|" + rowString.padEnd(map[0].length * tileWidth - 1) + "|"); // Row with borders
+    let rowString = row
+      .map(tile => chalk[tile.textColor](`${tile.symbol} `))
+      .join(""); // Add space for alignment
+    console.log(
+      chalk.bgRedBright("  ") +
+        rowString.padEnd(map[0].length * tileWidth - 1) +
+        chalk.bgRedBright("  "),
+    ); // Row with borders
   }
 
   console.log(horizontalBorder);
 }
-
-drawMapWithBorders(map);
 
 const main = () => {
   const Player1 = BattleManager.createCharacter(
@@ -47,4 +79,7 @@ const main = () => {
   Player1.doAction("Skip");
 };
 
+console.clear();
+drawMapWithBorders(map);
+console.log();
 main();
