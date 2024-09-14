@@ -32,8 +32,13 @@ export type MapSize = {
 export type Tile = {
   type: string;
   walkable: boolean;
-  symbol: string;
+  bgColor: ColorName;
   textColor: ColorName;
 };
 
 export type Map = Tile[][];
+
+export type MapRange = {
+  start: Coordinate;
+  end: Coordinate;
+};

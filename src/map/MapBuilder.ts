@@ -1,33 +1,73 @@
-import { Map, MapSize } from "../@types";
-import { defaultSetSize } from "./functions";
+import { Map, MapRange, MapSize } from "../@types";
+import {
+  defaultSetSize,
+  drawMapWithBorders,
+  setTerrainInRange,
+} from "./functions";
 
 interface Builder {
   map: Map;
-  setSize(size: MapSize): Map;
-  setForest(): Map;
-  setRiver(): Map;
-  setMountain(): Map;
-  setVillage(): Map;
+  setSize(size: MapSize): Builder;
+  setForest(range: MapRange): Builder;
+  setRiver(range: MapRange): Builder;
+  setMountain(range: MapRange): Builder;
+  setVillage(range: MapRange): Builder;
   drawMap(): void;
 }
 
-class MapBuilder implements Builder {
+export class MapBuilder implements Builder {
   map: Map = [];
 
-  setForest(): Map {
-    throw new Error("Method not implemented.");
+  setSize(size: MapSize) {
+    this.map = defaultSetSize(size);
+    return this;
   }
-  setRiver(): Map {
-    throw new Error("Method not implemented.");
+
+  setForest(range: MapRange) {
+    this.map = setTerrainInRange(this.map, range, {
+      type: "Forest",
+      walkable: true,
+      bgColor: "bgGreenBright",
+      textColor: "black",
+    });
+
+    return this;
   }
-  setMountain(): Map {
-    throw new Error("Method not implemented.");
+
+  setRiver(range: MapRange) {
+    this.map = setTerrainInRange(this.map, range, {
+      type: "River",
+      walkable: false,
+      bgColor: "bgBlue",
+      textColor: "white",
+    });
+
+    return this;
   }
-  setVillage(): Map {
-    throw new Error("Method not implemented.");
+
+  setMountain(range: MapRange) {
+    this.map = setTerrainInRange(this.map, range, {
+      type: "Mountain",
+      walkable: false,
+      bgColor: "bgWhite",
+      textColor: "black",
+    });
+
+    return this;
   }
-  drawMap(): void {
-    throw new Error("Method not implemented.");
+
+  setVillage(range: MapRange) {
+    this.map = setTerrainInRange(this.map, range, {
+      type: "Village",
+      walkable: true,
+      bgColor: "bgYellow",
+      textColor: "black",
+    });
+
+    return this;
   }
-  setSize = defaultSetSize;
+
+  drawMap() {
+    drawMapWithBorders(this.map);
+  }
 }
