@@ -1,3 +1,4 @@
+import { ColorName } from "chalk";
 import { Armor, Weapon } from "../items";
 
 export type CharacterAttributes = {
@@ -22,3 +23,17 @@ export type Coordinate = {
   x: number;
   y: number;
 };
+
+export type MapSize = {
+  width: number;
+  height: number;
+};
+
+export type Tile = {
+  type: string;
+  walkable: boolean;
+  symbol: string;
+  textColor: ColorName;
+};
+
+export type Map = Tile[][];
