@@ -1,7 +1,8 @@
 import chalk from "chalk";
-import { Map, MapRange, MapSize, Tile } from "../@types";
+import { Coordinate, Map, MapRange, MapSize, Tile } from "../@types";
+import { coordinateToAbsolutePosition } from "../utils";
 
-export function defaultSetSize(size: MapSize): Map {
+function defaultSetSize(size: MapSize): Map {
   const { height, width } = size;
 
   if (height < 5 || width < 5) {
@@ -22,11 +23,7 @@ export function defaultSetSize(size: MapSize): Map {
   );
 }
 
-export function setTerrainInRange(
-  map: Map,
-  range: MapRange,
-  templateTile: Tile,
-) {
+function setTerrainInRange(map: Map, range: MapRange, templateTile: Tile) {
   const { start, end } = range;
 
   if (!map.length) {
@@ -57,46 +54,41 @@ export function setTerrainInRange(
   return map;
 }
 
-function formatIndex(
-  rowIndex: number,
-  positionIndex: number,
-  rowLength: number,
-) {
-  const value = rowIndex * rowLength + positionIndex;
+function formatMapPosition(position: Coordinate, rowLength: number) {
+  const value = coordinateToAbsolutePosition(position, rowLength);
 
   if (value < 10) {
-    return ` 0${value}  `;
+    return ` 0${value} `;
   }
 
-  return ` ${value}  `;
+  return ` ${value} `;
 }
 
-export function drawMapWithBorders(map: Map) {
+function drawMapWithBorders(map: Map) {
   const borderChalk = chalk.bgGray;
+  const space = "  ";
 
-  const tileWidth = 6;
+  const tileWidth = 4;
   const horizontalBorder = borderChalk(
-    " " + " ".repeat(map[0].length * tileWidth - 1) + " ",
+    space + " ".repeat(map[0].length * tileWidth) + space,
   );
 
-  console.log(horizontalBorder);
   console.log(horizontalBorder);
 
   for (let [rowIndex, row] of map.entries()) {
     let rowString = row
-      .map((tile, index) =>
+      .map((tile, columnIndex) =>
         chalk[tile.bgColor][tile.textColor](
-          formatIndex(rowIndex, index, row.length),
+          formatMapPosition({ x: rowIndex, y: columnIndex }, row.length),
         ),
       )
       .join(""); // Add space for alignment
     console.log(
-      borderChalk("     ") +
-        rowString.padEnd(map[0].length * tileWidth - 1) +
-        borderChalk("     "),
+      borderChalk(space + rowString.padEnd(map[0].length * tileWidth) + space),
     ); // Row with borders
   }
 
   console.log(horizontalBorder);
-  console.log(horizontalBorder);
 }
+
+export { defaultSetSize, drawMapWithBorders, setTerrainInRange };

@@ -19,7 +19,6 @@ const main = () => {
 const map = new MapBuilder();
 
 map
-  .setSize({ width: 9, height: 10 })
-  .setForest({ start: { x: 0, y: 0 }, end: { x: 8, y: 8 } })
-  .setRiver({ start: { x: 9, y: 0 }, end: { x: 9, y: 8 } })
+  .setSize({ width: 5, height: 5 })
+  .setForest({ start: { x: 0, y: 0 }, end: { x: 4, y: 4 } })
   .drawMap();
