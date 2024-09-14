@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import {
   CharacterAttributes,
   CharacterItems,
@@ -19,19 +20,20 @@ export class Warrior extends Character {
 
   attack() {
     if (this.stats.energy < 2) {
-      return `${this.name} doesn't have enough energy to attack.`;
+      console.log(`${this.name} doesn't have enough energy to attack.`);
     }
     this.stats.energy -= 2;
 
-    const dmg = this.attributes.strength + this.attributes.dexterity * 0.2;
+    const dmg = Math.round(
+      this.attributes.strength + this.attributes.dexterity * 0.2,
+    );
     this.nextDmg = dmg;
-
-    return `${this.name} swings his sword! Dmg: ${dmg}.`;
+    console.log(chalk.cyanBright(`${this.name} swings his sword!`));
   }
 
   defend() {
     if (this.stats.energy < 2) {
-      return `${this.name} doesn't have enough energy to defend.`;
+      console.log(`${this.name} doesn't have enough energy to defend.`);
     }
     this.stats.energy -= 2;
 
@@ -39,25 +41,29 @@ export class Warrior extends Character {
 
     this.nextDmg = 0;
     this.bonusDef = def;
-    return `${this.name} is defending! More ${def} to defense!`;
+    console.log(`${this.name} is defending!`);
   }
 
   castSpell() {
-    const rage = this.attributes.strength * 0.2;
+    const rage = this.attributes.strength * 0.5;
     this.attributes.strength += rage;
 
-    return `${this.name} erases in rage! Increase in strength: +${rage}.`;
+    console.log(`${this.name} erases in rage! Increase in strength: +${rage}.`);
   }
 
   castUltimateSpell() {
     if (this.stats.energy < 10) {
-      return `${this.name} doesn't have enough energy to cast the ultimate spell.`;
+      console.log(
+        `${this.name} doesn't have enough energy to cast the ultimate spell.`,
+      );
     }
     this.stats.energy -= 10;
 
-    const dmg = this.attributes.intelligence * 2;
+    const dmg = this.attributes.strength * 2;
     this.nextDmg = dmg;
 
-    return `${this.name} casts the ultimate spell: a giant sword falls from heaven! Dmg: ${dmg}.`;
+    console.log(
+      `${this.name} casts the ultimate spell: a giant sword falls from heaven! Dmg: ${dmg}.`,
+    );
   }
 }

@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import {
   CharacterAttributes,
   CharacterItems,
@@ -23,6 +24,8 @@ export abstract class Character {
     this.bonusDef = 0;
   }
 
+  listCharacterInfo(): void {}
+
   doAction(action: ActionType): void {
     const actionSelected: { [key in ActionType]: () => void } = {
       [Action.ATTACK]: () => this.attack(),
@@ -36,7 +39,7 @@ export abstract class Character {
       throw new Error(`Action ${action} is not valid!`);
     }
 
-    console.log(actionSelected[action]());
+    actionSelected[action]();
   }
 
   rollDice(): number {
@@ -45,54 +48,67 @@ export abstract class Character {
     return number;
   }
 
-  move(newPosition: Coordinate): string {
+  move(newPosition: Coordinate): void {
     const possibleMove =
       this.calculateDistance(newPosition) <= this.stats.maxMovement;
     if (!possibleMove) {
-      return `${this.name} can't move to that position!`;
+      console.log(
+        chalk.bgRedBright(`${this.name} can't move to that position!`),
+      );
     }
     this.position = newPosition;
-    return `${this.name} moved to position x: ${newPosition.x}, y: ${newPosition.y}.`;
+    console.log(
+      `${this.name} moved to position x: ${newPosition.x}, y: ${newPosition.y}.`,
+    );
   }
 
-  skipTurn(): string {
+  skipTurn(): void {
     const energyRestored = this.attributes.intelligence * 0.3;
     this.stats.energy += energyRestored;
-    return `${this.name} skipped the turn and restored ${energyRestored} energy!`;
+    console.log(
+      `${this.name} skipped the turn and restored ${energyRestored} energy!`,
+    );
   }
 
-  dealDmg(target: Character): string {
+  dealDmg(target: Character): void {
     if (!this.canAttack(target.position)) {
-      return `${this.name} is too far from ${target.name} to attack!`;
+      console.log(`${this.name} is too far from ${target.name} to attack!`);
     }
     const dmg = this.nextDmg + this.items.weapon.damage;
     const def = target.bonusDef + target.items.armor.defense;
 
     if (dmg <= def) {
-      return `${this.name} landed a hit, but ${target.name} received 0 damage!`;
+      console.log(
+        `${this.name} landed a hit, but ${target.name} received 0 damage!`,
+      );
     }
 
     const totalDmg = dmg - def;
 
     if (this.isCriticalHit()) {
       target.receiveDmg(totalDmg * 1.75);
-      return `${this.name} landed a critical hit! ${target.name} received ${totalDmg * 2} damage!`;
+      console.log(
+        `${this.name} landed a critical hit! ${target.name} received ${totalDmg * 2} damage!`,
+      );
     }
 
     if (this.isCriticalMiss()) {
-      return `${this.name} missed the attack!`;
+      console.log(`${this.name} missed the attack!`);
     }
 
     target.receiveDmg(totalDmg);
-    return `${this.name} landed a hit! ${target.name} received ${totalDmg} damage!`;
+    console.log(
+      `${this.name} landed a hit! ${target.name} received ${totalDmg} damage!`,
+    );
   }
 
-  receiveDmg(dmg: number): string {
+  receiveDmg(dmg: number): void {
     this.stats.health -= dmg;
 
-    if (this.isDead()) return `${this.name} received ${dmg} damage and died!`;
+    if (this.isDead())
+      console.log(`${this.name} received ${dmg} damage and died!`);
 
-    return `${this.name} received ${dmg} damage!`;
+    console.log(`${this.name} received ${dmg} damage!`);
   }
 
   private isCriticalHit() {
@@ -120,8 +136,8 @@ export abstract class Character {
 
   protected nextDmg: number;
   protected bonusDef: number;
-  protected abstract attack(): string;
-  protected abstract defend(): string;
-  protected abstract castSpell(): string;
-  protected abstract castUltimateSpell(): string;
+  protected abstract attack(): void;
+  protected abstract defend(): void;
+  protected abstract castSpell(): void;
+  protected abstract castUltimateSpell(): void;
 }

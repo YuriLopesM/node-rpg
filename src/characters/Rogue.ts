@@ -1,7 +1,7 @@
 import {
-  CharacterStats,
   CharacterAttributes,
   CharacterItems,
+  CharacterStats,
   Coordinate,
 } from "../@types";
 import { Character } from "./Character";
@@ -21,7 +21,7 @@ export class Rogue extends Character {
 
   attack() {
     if (this.stats.energy < 1) {
-      return `${this.name} doesn't have enough energy to attack.`;
+      console.log(`${this.name} doesn't have enough energy to attack.`);
     }
     this.stats.energy -= 1;
 
@@ -29,12 +29,12 @@ export class Rogue extends Character {
       this.attributes.dexterity * 1.5 + this.attributes.strength * 0.1;
 
     this.nextDmg = dmg;
-    return `${this.name} strikes from the shadows! Dmg: ${dmg}.`;
+    console.log(`${this.name} strikes from the shadows! Dmg: ${dmg}.`);
   }
 
   defend() {
     if (this.stats.energy < 1) {
-      return `${this.name} doesn't have enough energy to defend.`;
+      console.log(`${this.name} doesn't have enough energy to defend.`);
     }
     this.stats.energy -= 1;
 
@@ -43,18 +43,20 @@ export class Rogue extends Character {
 
     if (dodge) {
       this.nextDmg = 0;
-      return `${this.name} dodges the attack!`;
+      console.log(`${this.name} dodges the attack!`);
     } else {
       const def =
         this.attributes.vitality * 0.5 + this.attributes.dexterity * 0.2;
       this.bonusDef = def;
-      return `${this.name} tries to dodge! Reduced damage: ${this.bonusDef}.`;
+      console.log(
+        `${this.name} tries to dodge! Reduced damage: ${this.bonusDef}.`,
+      );
     }
   }
 
   castSpell() {
     if (this.stats.energy < 3) {
-      return `${this.name} doesn't have enough energy to cast a spell.`;
+      console.log(`${this.name} doesn't have enough energy to cast a spell.`);
     }
     this.stats.energy -= 3;
 
@@ -62,18 +64,20 @@ export class Rogue extends Character {
     const dmg = this.attributes.dexterity + backstabBonus;
 
     this.nextDmg = dmg;
-    return `${this.name} uses backstab! Dmg: ${dmg}.`;
+    console.log(`${this.name} uses backstab! Dmg: ${dmg}.`);
   }
 
   castUltimateSpell() {
     if (this.stats.energy < 5) {
-      return `${this.name} doesn't have enough energy to cast the ultimate spell.`;
+      console.log(
+        `${this.name} doesn't have enough energy to cast the ultimate spell.`,
+      );
     }
     this.stats.energy -= 5;
 
     const dmg = this.attributes.dexterity * 2 + this.attributes.strength;
     this.nextDmg = dmg;
 
-    return `${this.name} throws a flurry of daggers! Dmg: ${dmg}.`;
+    console.log(`${this.name} throws a flurry of daggers! Dmg: ${dmg}.`);
   }
 }

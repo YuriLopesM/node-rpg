@@ -21,7 +21,7 @@ export class Mage extends Character {
 
   attack() {
     if (this.stats.energy < 5) {
-      return `${this.name} doesn't have enough energy to attack.`;
+      console.log(`${this.name} doesn't have enough energy to attack.`);
     }
     this.stats.energy -= 5;
     const dmg =
@@ -29,12 +29,12 @@ export class Mage extends Character {
       this.attributes.dexterity * 0.2 +
       this.attributes.strength * 0.1;
     this.nextDmg = dmg;
-    return `${this.name} send a mini-fireball! Dmg: ${dmg}.`;
+    console.log(`${this.name} send a mini-fireball! Dmg: ${dmg}.`);
   }
 
   defend() {
     if (this.stats.energy < 3) {
-      return `${this.name} doesn't have enough energy to defend.`;
+      console.log(`${this.name} doesn't have enough energy to defend.`);
     }
     this.stats.energy -= 3;
     const def =
@@ -45,23 +45,31 @@ export class Mage extends Character {
     this.nextDmg = 0;
     this.bonusDef = def;
 
-    return `${this.name} is defending with a magic shield! More ${def} to defense!`;
+    console.log(
+      `${this.name} is defending with a magic shield! More ${def} to defense!`,
+    );
   }
 
   castSpell() {
     this.stats.energy += this.attributes.intelligence;
-    return `${this.name} goes with the flow and casts a spell! Energy restored: +${this.attributes.intelligence}.`;
+    console.log(
+      `${this.name} goes with the flow and casts a spell! Energy restored: +${this.attributes.intelligence}.`,
+    );
   }
 
   castUltimateSpell() {
     if (this.stats.energy < 7) {
-      return `${this.name} doesn't have enough energy to cast the ultimate spell.`;
+      console.log(
+        `${this.name} doesn't have enough energy to cast the ultimate spell.`,
+      );
     }
 
     this.stats.energy -= 7;
     const dmg = this.attributes.intelligence * 2;
 
     this.nextDmg = dmg;
-    return `${this.name} casts the ultimate spell: a giant fireball! Dmg: ${dmg}.`;
+    console.log(
+      `${this.name} casts the ultimate spell: a giant fireball! Dmg: ${dmg}.`,
+    );
   }
 }
